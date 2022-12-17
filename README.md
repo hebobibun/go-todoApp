@@ -1,10 +1,11 @@
 # go-todoApp
 
-Todo App built with Golang
+Todo App built with Golang and MySQL
 
 # Requirement
 
 - Go v1.19
+- MySQL v8.x
 
 # How to run
 
