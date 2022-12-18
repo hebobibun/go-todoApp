@@ -11,14 +11,14 @@ Features :
 - Show my profile
 - Update password
 
+# Demo App
+
+![run](./demo/demo.gif)
+
 # Requirement
 
 - Go v1.19
 - MySQL v8.x
-
-# Demo App
-
-![run](./demo/demo.gif)
 
 # How to run
 
