@@ -47,3 +47,24 @@ func (am *ActMenu) Insert(newActivity Activity) (int, error) {
 
 	return int(id), nil
 }
+
+func (am *ActMenu) Show(id int) ([]Activity, error) {
+	rows, err := am.DB.Query("SELECT title, location, create_date FROM activities WHERE id_user = ?", id)
+	if err != nil {
+    	log.Println(err)
+	}
+
+	res := []Activity{} // creating empty slice
+	defer rows.Close()
+
+	for rows.Next() {
+		activity := Activity{} // creating new struct for every row
+		err = rows.Scan(&activity.Title, &activity.Location, &activity.CreateDate)
+		if err != nil {
+			log.Println(err)
+		}
+		res = append(res, activity)
+	}
+
+	return res, nil
+}

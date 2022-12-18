@@ -135,8 +135,24 @@ func main() {
 
 						// MY ACTIVITY
 						fmt.Println("MY ACTIVITY")
-						// on progress
-						fmt.Println("=======================")
+						fmt.Println("------------------")
+						activities, err := actMenu.Show(res.ID)
+						if err != nil {
+							fmt.Println("------------------")
+							fmt.Println(err.Error())
+						} else if len(activities) == 0 {
+							fmt.Println("You have 0 activity right now.")
+							fmt.Println("=======================")
+						} else {
+							for i := 0; i < len(activities); i++ {
+								fmt.Println("Activity", i+1, "   : ", activities[i].Title)
+								fmt.Println("Location      : ", activities[i].Location)
+								fmt.Println("Date          : ", activities[i].CreateDate)
+								fmt.Println("------------------")
+							}
+							fmt.Println("=======================")
+						}
+						
 
 					} else if loginMenu == 3 {
 
