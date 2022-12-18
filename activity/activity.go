@@ -9,39 +9,41 @@ import (
 type Activity struct {
 	ID int
 	Title string
+	CreateDate string
 	Location string
+	IDUser int
 }
 
-type ActMenu struct{
+type ActMenu struct {
 	DB *sql.DB
 }
 
-func (am *ActMenu) AddActivity(newActivity Activity) (bool, error) {
-	// Menyiapkan query untuk insert
-	addQuery, err := am.DB.Prepare("INSERT INTO activities (id_user, title, location, create_date) VALUES (?, ?, ?, now())")
+func (am *ActMenu) Insert(newActivity Activity) (int, error) {
+	insertQry, err := am.DB.Prepare("INSERT INTO activities (title, location, create_date, id_user) VALUES (?,?,now(),?)")
 	if err != nil {
-		log.Println("Prep insert a new activity : ", err.Error())
-		return false, errors.New("prep statement insert a new activity error")
+		log.Println("Prepare insert newActivity : ", err.Error())
+		return 0, errors.New("Prepare statement insert new activity error.")
 	}
 
-	// Menjalankan query dengan parameter tertentu
-	res, err := addQuery.Exec(newActivity.ID, newActivity.Title, newActivity.Location)
+	res, err := insertQry.Exec(newActivity.Title, newActivity.Location, newActivity.IDUser)
 	if err != nil {
-		log.Println("Insert a new activity error : ", err.Error())
-		return false, errors.New("Insert a new activity error")
+		log.Println("Insert new activity : ", err.Error())
+		return 0, errors.New("Insert new activity error.")
 	}
 
 	affRows, err := res.RowsAffected()
 
 	if err != nil {
-		log.Println("after insert a new activity ", err.Error())
-		return false, errors.New("error after insert a new activity")
+		log.Println("Afer inser new activity : ", err.Error())
+		return 0, errors.New("Error after insert new activity.")
 	}
 
 	if affRows <= 0 {
-		log.Println("no record affected")
-		return false, errors.New("no record")
+		log.Println("No rows affected.")
+		return 0, errors.New("No record affected.")
 	}
 
-	return true, nil
+	id, _ := res.LastInsertId()
+
+	return int(id), nil
 }

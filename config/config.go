@@ -21,31 +21,30 @@ type Config struct {
 func ReadConfig() *Config {
 	err := godotenv.Load("local.env")
 	if err != nil {
-		fmt.Println("Error", err.Error())
+		fmt.Println("Error while reading .env", err.Error())
 		return nil
 	}
-	res := Config{}
+
+	var res Config
 	res.DBUser = os.Getenv("DBUSER")
 	res.DBPass = os.Getenv("DBPASS")
 	res.DBHost = os.Getenv("DBHOST")
+	res.DBName = os.Getenv("DBNAME")
 	readData := os.Getenv("DBPORT")
 	res.DBPort, err = strconv.Atoi(readData)
 	if err != nil {
-		fmt.Println("Error saat convert", err.Error())
+		fmt.Println("Error while converting DBPort", err.Error())
 		return nil
 	}
-	res.DBName = os.Getenv("DBNAME")
+
 	return &res
 }
 
 func ConnectSQL(c Config) *sql.DB {
-	// format source username:password@tcp(host:port)/databaseName
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", c.DBUser, c.DBPass, c.DBHost, c.DBPort, c.DBName)
 	db, err := sql.Open("mysql", dsn)
-	// db, err := sql.Open("mysql", "root:@tcp(localhost:3306/db_tugas")
 	if err != nil {
-		fmt.Println("terjadi error", err.Error())
+		fmt.Println("Error is happening : ", err.Error())
 	}
-
 	return db
 }
